@@ -364,3 +364,4 @@ unity-android-resources/
 *.log
 *.swp
 *.lock
+Logs/
