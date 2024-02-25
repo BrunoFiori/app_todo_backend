@@ -19,8 +19,8 @@ Este projeto usa duas imagens Docker: Seq e PostgreSQL. Aqui estão as instruç�
 ```bash
 docker run --name Banco_App_Todo_Dev -e POSTGRES_USER=bruno.fiori -e POSTGRES_PASSWORD=123456 -p 5432:5432 -d postgres
 AND 
-docker run --name seq-dev -d --restart unless-stopped -e ACCEPT_EULA=Y -v /path/to/seq-dev/data -p 5431:80 datalust/seq
-```
+docker run --name seq -d --restart unless-stopped -e ACCEPT_EULA=Y -p 5431:80 datalust/seq
+``` -v C:\Logs\Seq:/data
 ---
 Step to compile the project
 ```
