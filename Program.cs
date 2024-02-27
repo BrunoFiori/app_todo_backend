@@ -1,8 +1,11 @@
+using App_Todo_Backend.Data;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
+var connectionString = builder.Configuration.GetConnectionString("TodoDbConnectionString");
+builder.Services.AddDbContext<TodoDbContext>(options => options.UseNpgsql(connectionString));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -22,7 +25,7 @@ builder.Services.AddCors(options =>
 
 
 //Serilog configuration to register logs in different destinations, including console, file and Seq server.
-builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().ReadFrom.Configuration(ctx.Configuration));
+builder.Host.UseSerilog((context, loggerConfig)  => loggerConfig.WriteTo.Console().ReadFrom.Configuration(context.Configuration));
 
 var app = builder.Build();
 
@@ -33,8 +36,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseSerilogRequestLogging();
 
- app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
 app.UseCors("allowall");
