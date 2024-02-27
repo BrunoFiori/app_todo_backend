@@ -26,7 +26,18 @@ Este projeto usa duas imagens Docker: Seq e PostgreSQL. Aqui estão as instruç�
 docker run --name Banco_App_Todo_Dev -e POSTGRES_PASSWORD=123456 -p 5432:5432 -d postgres:latest
 AND 
 docker run --name seq -d --restart unless-stopped -e ACCEPT_EULA=Y -p 5431:80 datalust/seq:latest
-``` 
+```
+Este projeto utiliza o Entity Framework, um ORM (Object-Relational Mapper) que permite aos desenvolvedores .NET trabalhar com um banco de dados usando objetos .NET. Ele elimina a necessidade da maioria do código de acesso a dados que os desenvolvedores geralmente precisam escrever. Executando Migrations O Entity Framework Migrations permite que você mantenha o esquema do seu banco de dados sincronizado com o modelo de dados de sua aplicação, gerenciando alterações incrementais. Para executar as migrações, você precisa usar os seguintes comandos no terminal integrado do Visual Studio:
+
+Para adicionar uma nova migração:
+
+. Add-Migration <migration_name>
+
+Para atualizar o banco de dados com a última migração:
+
+. Update-Database
+
+Lembre-se de substituir <migration_name> pelo nome que deseja dar à sua migração. Nota: Estes comandos são para o Entity Framework Core. Se estiver usando uma versão mais antiga do Entity Framework, os comandos podem ser um pouco diferentes.
 ---
 Step to compile the project
 ```
