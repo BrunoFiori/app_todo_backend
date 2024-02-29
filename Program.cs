@@ -1,3 +1,4 @@
+using App_Todo_Backend.Configurations;
 using App_Todo_Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -26,6 +27,8 @@ builder.Services.AddCors(options =>
 
 //Serilog configuration to register logs in different destinations, including console, file and Seq server.
 builder.Host.UseSerilog((context, loggerConfig)  => loggerConfig.WriteTo.Console().ReadFrom.Configuration(context.Configuration));
+
+builder.Services.AddAutoMapper(typeof(MapperConfig));
 
 var app = builder.Build();
 
