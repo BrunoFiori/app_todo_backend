@@ -8,36 +8,35 @@ using Microsoft.EntityFrameworkCore;
 using App_Todo_Backend.Data;
 using App_Todo_Backend.Models.User;
 using AutoMapper;
+using App_Todo_Backend.Contract.Users;
 
 namespace App_Todo_Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
-    {
-        private readonly TodoDbContext _context;
+    {        
         private readonly IMapper _mapper;
+        private readonly IUserRepository _userRepository;
 
-        public UsersController(TodoDbContext context, IMapper mapper)
-        {
-            _context = context;
+        public UsersController(IMapper mapper, IUserRepository userRepository)
+        {            
             _mapper = mapper;
+            _userRepository = userRepository;
         }
 
         // GET: api/Users
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OutputUser>>> GetUsers()
         {
-            return _mapper.Map<List<OutputUser>>(await _context.Users.ToListAsync());
+            return _mapper.Map<List<OutputUser>>(await _userRepository.ListAllAsync());
         }
 
         // GET: api/Users/5
         [HttpGet("{id}")]
         public async Task<ActionResult<OutputUser>> GetUser(int id)
         {
-            var user = await _context.Users
-                .Include(x => x.Todos)
-                .FirstOrDefaultAsync(x => x.Id == id);
+            var user = await _userRepository.GetTodos(id);
 
             if (user == null)
             {
@@ -51,10 +50,8 @@ namespace App_Todo_Backend.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, UpdateUser updateUser)
-        {
-
-            //_context.Entry(user).State = EntityState.Modified;
-            var user = await _context.Users.FindAsync(id);
+        {   
+            var user = await _userRepository.GetByIdAsync(id);
 
             if (user == null)
             {
@@ -65,7 +62,8 @@ namespace App_Todo_Backend.Controllers
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _userRepository.UpdateAsync(user);
+                await _userRepository.Commit();
             }
             catch (DbUpdateConcurrencyException ex)
             {
@@ -81,8 +79,9 @@ namespace App_Todo_Backend.Controllers
         public async Task<ActionResult<User>> PostUser(CreateUser inputUser)
         {
             User user = _mapper.Map<User>(inputUser);
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+
+            await _userRepository.AddAsync(user);
+            await _userRepository.Commit();
 
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
@@ -91,21 +90,22 @@ namespace App_Todo_Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _userRepository.GetByIdAsync(id);
+
             if (user == null)
             {
                 return NotFound();
             }
 
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            await _userRepository.DeleteAsync(user);
+            await _userRepository.Commit();
 
             return NoContent();
         }
 
-        private bool UserExists(int id)
+        private async Task<bool> UserExists(int id)
         {
-            return _context.Users.Any(e => e.Id == id);
+            return await _userRepository.Exists(id);
         }
     }
 }
