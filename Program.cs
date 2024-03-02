@@ -1,5 +1,8 @@
 using App_Todo_Backend.Configurations;
+using App_Todo_Backend.Contract;
+using App_Todo_Backend.Contract.Users;
 using App_Todo_Backend.Data;
+using App_Todo_Backend.Repository;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -29,6 +32,9 @@ builder.Services.AddCors(options =>
 builder.Host.UseSerilog((context, loggerConfig)  => loggerConfig.WriteTo.Console().ReadFrom.Configuration(context.Configuration));
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
+
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));    
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
