@@ -1,12 +1,10 @@
-﻿namespace App_Todo_Backend.Data
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace App_Todo_Backend.Data
 {
-    public class User
+    public class User : IdentityUser
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string HashPassword { get; set; }
-        public string Avatar { get; set; }
-        public virtual IList<Todo> Todos { get; set; }
+        public string FirstName { get; set; }
+        public string LastNme { get; set; }
     }
 }

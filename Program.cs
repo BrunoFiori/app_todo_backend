@@ -1,8 +1,8 @@
 using App_Todo_Backend.Configurations;
 using App_Todo_Backend.Contract;
-using App_Todo_Backend.Contract.Users;
 using App_Todo_Backend.Data;
 using App_Todo_Backend.Repository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -10,6 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("TodoDbConnectionString");
 builder.Services.AddDbContext<TodoDbContext>(options => options.UseNpgsql(connectionString));
+
+builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<TodoDbContext>();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -34,7 +39,7 @@ builder.Host.UseSerilog((context, loggerConfig)  => loggerConfig.WriteTo.Console
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));    
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 
 var app = builder.Build();
 
