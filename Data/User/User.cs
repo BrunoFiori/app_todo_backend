@@ -5,6 +5,6 @@ namespace App_Todo_Backend.Data
     public class User : IdentityUser
     {
         public string FirstName { get; set; }
-        public string LastNme { get; set; }
+        public string LastName { get; set; }
     }
 }

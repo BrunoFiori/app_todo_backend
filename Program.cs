@@ -1,7 +1,9 @@
 using App_Todo_Backend.Configurations;
 using App_Todo_Backend.Contract;
+using App_Todo_Backend.Contract.Users;
 using App_Todo_Backend.Data;
 using App_Todo_Backend.Repository;
+using App_Todo_Backend.Repository.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -39,6 +41,7 @@ builder.Host.UseSerilog((context, loggerConfig)  => loggerConfig.WriteTo.Console
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));    
+builder.Services.AddScoped<IAuthManager, AuthManager>();    
 
 
 var app = builder.Build();

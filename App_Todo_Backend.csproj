@@ -23,11 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Contract\Users\" />
     <Folder Include="Logs\" />
     <Folder Include="Migrations\" />
-    <Folder Include="Models\User\" />
-    <Folder Include="Repository\Users\" />
   </ItemGroup>
 
 </Project>
