@@ -19,9 +19,6 @@ namespace App_Todo_Backend.Repository.Auth
 
         private readonly string _loginProvider;
         private readonly string _refreshToken;
-
-        // private const string _loginProvider = "TodoAPI";
-        // private const string _refreshToken = "RefreshToken";
         public AuthManager(IMapper mapper, UserManager<User> userManager, IConfiguration configuration)
         {
             _mapper = mapper;

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace App_Todo_Backend.Models.User
 {
     public class InputUser : LoginUser
-    {
+    {        
         [Required]
         public string FirstName { get; set; }
         [Required]
