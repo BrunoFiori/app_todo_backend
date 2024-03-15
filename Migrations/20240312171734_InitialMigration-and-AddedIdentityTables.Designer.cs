@@ -3,6 +3,7 @@ using System;
 using App_Todo_Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,13 +12,15 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace App_Todo_Backend.Migrations
 {
     [DbContext(typeof(TodoDbContext))]
-    partial class TodoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240312171734_InitialMigration-and-AddedIdentityTables")]
+    partial class InitialMigrationandAddedIdentityTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -45,24 +48,6 @@ namespace App_Todo_Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Todos");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2024, 2, 27, 15, 16, 25, 0, DateTimeKind.Utc),
-                            Description = "Estudar C# para melhorar minhas habilidades com a linguagem",
-                            Done = false,
-                            Title = "Estudar C#"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(2024, 2, 27, 18, 27, 45, 0, DateTimeKind.Utc),
-                            Description = "Estudar Ciências COntábeis para sustentar o Bruno 💕",
-                            Done = false,
-                            Title = "Estudar Ciências Contábeis 🤑"
-                        });
                 });
 
             modelBuilder.Entity("App_Todo_Backend.Data.User", b =>
@@ -87,7 +72,7 @@ namespace App_Todo_Backend.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("text");
 
-                    b.Property<string>("LastName")
+                    b.Property<string>("LastNme")
                         .HasColumnType("text");
 
                     b.Property<bool>("LockoutEnabled")
@@ -133,24 +118,6 @@ namespace App_Todo_Backend.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "bdf86add-3709-4252-8fcd-g8h13029cceb",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "b577a9ea-4cfe-44c6-b19b-0a175445e0ee",
-                            Email = "admin@gmail.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@GMAIL.COM",
-                            NormalizedUserName = "ADMINISTRATOR",
-                            PasswordHash = "AQAAAAIAAYagAAAAEA2E3H27Bc2D28SWoLXEfyPCEl+icxLEbdgjB9EuEcsr/iheA2PKLjCXHxFFFgSs6A==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "",
-                            TwoFactorEnabled = false,
-                            UserName = "Administrator"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -177,20 +144,6 @@ namespace App_Todo_Backend.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "bdf86add-3709-4252-8fcd-f7e02918bbda",
-                            Name = "Administrator",
-                            NormalizedName = "ADMINASTRATOR"
-                        },
-                        new
-                        {
-                            Id = "c3198671-d7d3-4e38-bacd-9ad7f679c0a6",
-                            Name = "User",
-                            NormalizedName = "USER"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -278,13 +231,6 @@ namespace App_Todo_Backend.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "bdf86add-3709-4252-8fcd-g8h13029cceb",
-                            RoleId = "bdf86add-3709-4252-8fcd-f7e02918bbda"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
