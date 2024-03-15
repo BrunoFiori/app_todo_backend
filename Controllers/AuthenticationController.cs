@@ -1,5 +1,6 @@
 ﻿using App_Todo_Backend.Contract.Users;
 using App_Todo_Backend.Models.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace App_Todo_Backend.Controllers
@@ -16,6 +17,7 @@ namespace App_Todo_Backend.Controllers
 
         [HttpPost]
         [Route("register")]
+        [Authorize(Roles = "Administrator")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]//potential return 400 reutrn type
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]//potential return 500 reutrn type
         [ProducesResponseType(StatusCodes.Status200OK)]//potential return 200 reutrn type
