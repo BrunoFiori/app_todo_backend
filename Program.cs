@@ -17,8 +17,10 @@ var connectionString = builder.Configuration.GetConnectionString("TodoDbConnecti
 builder.Services.AddDbContext<TodoDbContext>(options => options.UseNpgsql(connectionString));
 
 builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddTokenProvider<DataProtectorTokenProvider<User>>(builder.Configuration["RefreshToken:LoginProvider"])
     .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<TodoDbContext>();
+    .AddEntityFrameworkStores<TodoDbContext>()
+    .AddDefaultTokenProviders();
 
 
 builder.Services.AddControllers();
@@ -77,6 +79,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("allowall");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

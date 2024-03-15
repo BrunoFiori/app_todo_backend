@@ -39,5 +39,18 @@ namespace App_Todo_Backend.Controllers
                 return Unauthorized();
             return Ok(result);
         }
+
+        [HttpPost]
+        [Route("refreshtoken")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]//potential return 400 reutrn type
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]//potential return 500 reutrn type
+        [ProducesResponseType(StatusCodes.Status200OK)]//potential return 200 reutrn type
+        public async Task<IActionResult> RefreshToken([FromBody] AuthResponse authResponse)
+        {
+            var result = await _authManager.VerifyRefeshToken(authResponse);
+            if (result == null)
+                return Unauthorized();
+            return Ok(result);
+        }
     }
 }

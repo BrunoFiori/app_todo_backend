@@ -1,9 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace App_Todo_Backend.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]")]    
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -17,12 +18,36 @@ namespace App_Todo_Backend.Controllers
         {
             _logger = logger;
         }
-
+        
+        [HttpGet("GetADM")]
+        [Authorize(Roles = "Administrator")]
+        public IEnumerable<WeatherForecast> GetAdmin()
+        {        
+            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            {
+                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                TemperatureC = Random.Shared.Next(-20, 55),
+                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+            })
+            .ToArray();
+        }
+        
+        [HttpGet("GetUser")]
+        [Authorize]
+        public IEnumerable<WeatherForecast> GetUser()
+        {         
+            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            {
+                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                TemperatureC = Random.Shared.Next(-20, 55),
+                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+            })
+            .ToArray();
+        }
+        
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
-            _logger.LogInformation("CU DE URUBU INFO");
-            _logger.LogError("CU DE URUBU Erro");            
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
