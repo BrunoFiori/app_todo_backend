@@ -15,7 +15,7 @@ namespace App_Todo_Backend.Controllers
         }
 
         [HttpPost]
-        [Route("Register")]
+        [Route("register")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]//potential return 400 reutrn type
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]//potential return 500 reutrn type
         [ProducesResponseType(StatusCodes.Status200OK)]//potential return 200 reutrn type
@@ -25,6 +25,19 @@ namespace App_Todo_Backend.Controllers
             if (result.Any())
                 return BadRequest(result);
             return Ok();
+        }
+        
+        [HttpPost]
+        [Route("login")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]//potential return 400 reutrn type
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]//potential return 500 reutrn type
+        [ProducesResponseType(StatusCodes.Status200OK)]//potential return 200 reutrn type
+        public async Task<IActionResult> Register([FromBody] LoginUser loginUser)
+        {
+            var result = await _authManager.Login(loginUser);
+            if (result == null)
+                return Unauthorized();
+            return Ok(result);
         }
     }
 }
