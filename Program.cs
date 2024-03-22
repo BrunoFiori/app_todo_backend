@@ -2,6 +2,7 @@ using App_Todo_Backend.Configurations;
 using App_Todo_Backend.Contract;
 using App_Todo_Backend.Contract.Users;
 using App_Todo_Backend.Data;
+using App_Todo_Backend.Middleware;
 using App_Todo_Backend.Repository;
 using App_Todo_Backend.Repository.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -74,6 +75,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseSerilogRequestLogging();
+
+app.UseMiddleware<ExceptionsMiddleware>();
 
 app.UseHttpsRedirection();
 
