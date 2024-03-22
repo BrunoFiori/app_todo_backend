@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using App_Todo_Backend.Exceptions;
 
 namespace App_Todo_Backend.Repository.Auth
 {
@@ -60,7 +61,7 @@ namespace App_Todo_Backend.Repository.Auth
         public async Task<AuthResponse> Login(LoginUser inputUser)
         {
             _user = await _userManager.FindByEmailAsync(inputUser.Email);
-            if (_user!= null)
+            if (_user != null)
             {
                 if (await _userManager.CheckPasswordAsync(_user, inputUser.Password))
                 {
@@ -112,6 +113,15 @@ namespace App_Todo_Backend.Repository.Auth
                 );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public async Task<bool> GetByEmail(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+                throw new NotFoundException(nameof(GetByEmail), email); ;
+            return true;
         }
     }
 }
