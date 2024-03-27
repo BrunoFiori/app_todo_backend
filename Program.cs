@@ -5,6 +5,7 @@ using App_Todo_Backend.Data;
 using App_Todo_Backend.Middleware;
 using App_Todo_Backend.Repository;
 using App_Todo_Backend.Repository.Auth;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +24,6 @@ builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirme
     .AddEntityFrameworkStores<TodoDbContext>()
     .AddDefaultTokenProviders();
 
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -40,13 +40,28 @@ builder.Services.AddCors(options =>
            });
 });
 
+builder.Services.AddApiVersioning(config =>
+{
+    config.AssumeDefaultVersionWhenUnspecified = true;
+    config.DefaultApiVersion = new ApiVersion(1, 0);
+    config.ReportApiVersions = true;
+    config.ApiVersionReader = ApiVersionReader.Combine(
+            new HeaderApiVersionReader("api-version"),
+            new QueryStringApiVersionReader("X-Version"),
+            new MediaTypeApiVersionReader("ver")
+        );
+}).AddApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true;
+});
 
 //Serilog configuration to register logs in different destinations, including console, file and Seq server.
-builder.Host.UseSerilog((context, loggerConfig)  => loggerConfig.WriteTo.Console().ReadFrom.Configuration(context.Configuration));
+builder.Host.UseSerilog((context, loggerConfig) => loggerConfig.WriteTo.Console().ReadFrom.Configuration(context.Configuration));
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));    
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IAuthManager, AuthManager>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -63,7 +78,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
-    }); 
+    });
 
 var app = builder.Build();
 

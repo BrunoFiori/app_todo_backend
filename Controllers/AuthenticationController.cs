@@ -1,12 +1,14 @@
 ﻿using App_Todo_Backend.Contract.Users;
 using App_Todo_Backend.Models.User;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace App_Todo_Backend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class AuthenticationController : ControllerBase
     {
         public readonly IAuthManager _authManager;
