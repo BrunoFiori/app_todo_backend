@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace App_Todo_Backend.Data
+﻿namespace App_Todo_Backend.Data
 {
     public class Todo
     {
