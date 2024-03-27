@@ -80,6 +80,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.AddResponseCaching(options =>
+{
+    options.MaximumBodySize = 1024;
+    options.UseCaseSensitivePaths = true;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -96,6 +102,19 @@ app.UseMiddleware<ExceptionsMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseCors("allowall");
+
+app.UseResponseCaching();
+app.Use(async (context, next) =>
+{
+    context.Response.GetTypedHeaders().CacheControl = new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
+    {
+        Public = true,
+        MaxAge = TimeSpan.FromSeconds(10) // This indicates that the response can be cached by the client for a maximum of 10 seconds before it needs to be revalidated with the serve 
+    };
+    context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] = new string[] { "Accept-Encoding" };
+
+    await next();
+});
 
 app.UseAuthentication();
 app.UseAuthorization();
