@@ -1,5 +1,8 @@
 ﻿using App_Todo_Backend.Contract;
 using App_Todo_Backend.Data;
+using App_Todo_Backend.Models.QueryParameters;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using System.CodeDom;
 
@@ -8,9 +11,12 @@ namespace App_Todo_Backend.Repository
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         private readonly TodoDbContext _todoDbContext;
-        public GenericRepository(TodoDbContext todoDbContext)
+        private readonly IMapper _mapper;
+
+        public GenericRepository(TodoDbContext todoDbContext, IMapper mapper)
         {
             _todoDbContext = todoDbContext;
+            _mapper = mapper;
         }
 
         public async Task<T> AddAsync(T entity)
@@ -43,6 +49,24 @@ namespace App_Todo_Backend.Repository
         public async Task<List<T>> ListAllAsync()
         {
             return await _todoDbContext.Set<T>().ToListAsync();
+
+        }
+        public async Task<PagedResult<TResult>> ListAllPagedAsync<TResult>(QueryParameters queryParameters)
+        {
+            var totalSize = await _todoDbContext.Set<T>().CountAsync();
+            var items = await _todoDbContext.Set<T>().Skip(queryParameters.PageSize * queryParameters.PageNumber)
+                .Take(queryParameters.PageSize)
+                .ProjectTo<TResult>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return new PagedResult<TResult>
+            {
+                TotalCount = totalSize,
+                PageNumber = queryParameters.PageNumber,
+                RecordNumber = queryParameters.PageSize,
+                Items = items
+            };
+
         }
 
         public async Task UpdateAsync(T entity)

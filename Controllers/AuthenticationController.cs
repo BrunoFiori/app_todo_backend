@@ -36,7 +36,7 @@ namespace App_Todo_Backend.Controllers
             return Ok();
         }
 
-        [HttpGet]
+        [HttpGet("GetUserByEmail")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]//potential return 400 reutrn type
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]//potential return 500 reutrn type

@@ -11,6 +11,7 @@ namespace App_Todo_Backend.Configurations
         {   
             CreateMap<User, InputUser>().ReverseMap()
                 .AfterMap((inusr, usr) => usr.UserName= inusr.Email);
+            CreateMap<User, OutputUser>().ReverseMap();
             CreateMap<Todo, InputTodo>().ReverseMap();
             CreateMap<OutputTodo, Todo>().ReverseMap();
         }
