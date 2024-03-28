@@ -4,6 +4,7 @@ using App_Todo_Backend.Models.Todo;
 using App_Todo_Backend.Models.User;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 
 namespace App_Todo_Backend.Controllers
 {
@@ -22,6 +23,7 @@ namespace App_Todo_Backend.Controllers
         }
 
         [HttpGet("SemFiltro")]
+        [EnableQuery]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]//potential return 400 reutrn type
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]//potential return 500 reutrn type
         [ProducesResponseType(StatusCodes.Status200OK)]//potential return 200 reutrn type
@@ -32,6 +34,7 @@ namespace App_Todo_Backend.Controllers
         }
 
         [HttpGet]
+        [EnableQuery]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]//potential return 400 reutrn type
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]//potential return 500 reutrn type
         [ProducesResponseType(StatusCodes.Status200OK)]//potential return 200 reutrn type
