@@ -1,7 +1,6 @@
-﻿using App_Todo_Backend.Contract.Todo;
-using App_Todo_Backend.Models.QueryParameters;
-using App_Todo_Backend.Models.Todo;
-using App_Todo_Backend.Models.User;
+﻿using App_Todo_Backend.Core.Contract.Todo;
+using App_Todo_Backend.Core.Models.QueryParameters;
+using App_Todo_Backend.Core.Models.Todo;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 

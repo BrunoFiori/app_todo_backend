@@ -1,5 +1,5 @@
-﻿using App_Todo_Backend.Contract.Users;
-using App_Todo_Backend.Models.User;
+﻿using App_Todo_Backend.Core.Contract.Users;
+using App_Todo_Backend.Core.Models.User;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
