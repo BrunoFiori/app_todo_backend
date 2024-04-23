@@ -299,22 +299,6 @@ obj/
 ehthumbs.db
 Thumbs.db
 
-# Project-specific files
-*.csproj
-*.vbproj
-*.vcxproj
-*.vcxproj.filters
-*.xproj
-project.lock.json
-.project.json
-*.kproj
-*.csproj.user
-*.pubxml.user
-*.pubxml
-*.userprefs
-*.suo
-*.sln.ide/
-
 # Visual Studio Code
 .vscode/
 
