@@ -1,6 +1,7 @@
-﻿using App_Todo_Backend.Core.Models.QueryParameters;
+﻿
+using App_Todo_Backend.Data.Models;
 
-namespace App_Todo_Backend.Core.Contract
+namespace App_Todo_Backend.Data.Contract
 {
     public interface IGenericRepository<T> where T : class
     {

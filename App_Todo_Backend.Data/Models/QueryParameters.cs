@@ -1,4 +1,4 @@
-﻿namespace App_Todo_Backend.Core.Models.QueryParameters
+﻿namespace App_Todo_Backend.Data.Models
 {
     public class QueryParameters
     {
