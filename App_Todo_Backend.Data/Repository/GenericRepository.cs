@@ -36,7 +36,7 @@ namespace App_Todo_Backend.Core.Repository
             return entity != null;
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T?> GetByIdAsync(int id)
         {   
             return await _todoDbContext.Set<T>().FindAsync(id);
         }

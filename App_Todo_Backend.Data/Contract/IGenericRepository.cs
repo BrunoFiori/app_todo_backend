@@ -7,7 +7,7 @@ namespace App_Todo_Backend.Data.Contract
     {
         Task<List<T>> ListAllAsync();
         Task<PagedResult<TResult>> ListAllPagedAsync<TResult>(QueryParameters queryParameters);
-        Task<T> GetByIdAsync(int id);
+        Task<T?> GetByIdAsync(int id);
         Task<T> AddAsync(T entity);
         Task UpdateAsync(T entity);
         Task DeleteAsync(T entity);
