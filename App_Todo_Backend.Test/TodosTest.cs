@@ -3,7 +3,6 @@ using App_Todo_Backend.Core.Services;
 using App_Todo_Backend.Data.Contract;
 using App_Todo_Backend.Data.Models;
 using AutoMapper;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
 namespace App_Todo_Backend.Test
@@ -23,7 +22,7 @@ namespace App_Todo_Backend.Test
         }
 
         [TestMethod]
-        public async void ListAllAsync_ShouldReturnListOfOutputTodo()
+        public void ListAllAsync_ShouldReturnListOfOutputTodo()
         {
             
             var inputTodos = new List<Todo>
@@ -42,13 +41,13 @@ namespace App_Todo_Backend.Test
             _mockRepositoryTodo.Setup(repo => repo.ListAllAsync()).ReturnsAsync(inputTodos);
             _mockMapper.Setup(mapper => mapper.Map<List<OutputTodo>>(inputTodos)).Returns(expectedOutputTodos);
 
-            var result = await _serviceTodo.ListAllAsync();
+            var result = _serviceTodo.ListAllAsync().Result;
 
             Assert.AreEqual(expectedOutputTodos, result);
         }
 
         [TestMethod]
-        public async void ListAllPagedAsync_ShouldReturnPagedResultOfOutputTodo()
+        public void ListAllPagedAsync_ShouldReturnPagedResultOfOutputTodo()
         {
             var inputTodos = new PagedResult<Todo>
             {
@@ -73,7 +72,7 @@ namespace App_Todo_Backend.Test
             _mockRepositoryTodo.Setup(repo => repo.ListAllPagedAsync<Todo>(It.IsAny<QueryParameters>())).ReturnsAsync(inputTodos);
             _mockMapper.Setup(mapper => mapper.Map<PagedResult<OutputTodo>>(inputTodos)).Returns(expectedPagedResult);
 
-            var result = await _serviceTodo.ListAllPagedAsync(It.IsAny<QueryParameters>());
+            var result = _serviceTodo.ListAllPagedAsync(It.IsAny<QueryParameters>()).Result;
 
             Assert.AreEqual(expectedPagedResult, result);
         }
