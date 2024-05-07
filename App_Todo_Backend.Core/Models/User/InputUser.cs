@@ -1,7 +1,6 @@
-﻿using App_Todo_Backend.Core.Configurations;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace App_Todo_Backend.Core.Models.User
+namespace App_Todo_Backend.Core.Models
 {
     public class InputUser : LoginUser
     {        

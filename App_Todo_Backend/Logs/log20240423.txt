@@ -1,0 +1,17 @@
+2024-04-23 20:54:10.503 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-04-23 20:54:10.628 -03:00 [INF] Hosting environment: Development
+2024-04-23 20:54:10.630 -03:00 [INF] Content root path: C:\fontes\app_todo_backend\App_Todo_Backend
+2024-04-23 21:05:36.232 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-04-23 21:05:36.291 -03:00 [INF] Hosting environment: Development
+2024-04-23 21:05:36.293 -03:00 [INF] Content root path: C:\fontes\app_todo_backend\App_Todo_Backend
+2024-04-23 21:06:08.248 -03:00 [INF] HTTP POST /api/v1/Authentication/login responded 200 in 2630.1561 ms
+2024-04-23 21:07:18.950 -03:00 [INF] HTTP GET /api/v1/Todo/SemFiltro responded 200 in 999.0079 ms
+2024-04-23 21:07:36.743 -03:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2024-04-23 21:07:36.745 -03:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2024-04-23 21:07:36.796 -03:00 [INF] HTTP GET /api/v1/Todo responded 200 in 135.2242 ms
+2024-04-23 21:07:49.606 -03:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2024-04-23 21:07:49.606 -03:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2024-04-23 21:07:49.611 -03:00 [INF] HTTP GET /api/v1/Todo responded 200 in 17.9299 ms
+2024-04-23 21:13:25.109 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-04-23 21:13:25.138 -03:00 [INF] Hosting environment: Development
+2024-04-23 21:13:25.139 -03:00 [INF] Content root path: C:\fontes\app_todo_backend\App_Todo_Backend

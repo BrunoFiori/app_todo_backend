@@ -1,44 +1,48 @@
 ﻿using AutoMapper;
-using App_Todo_Backend.Core.Contract.Users;
-using App_Todo_Backend.Core.Models.User;
 using Microsoft.AspNetCore.Identity;
-using App_Todo_Backend.Data;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using App_Todo_Backend.Core.Exceptions;
 using Microsoft.Extensions.Configuration;
+using App_Todo_Backend.Data.Models;
+using App_Todo_Backend.Core.Contract;
+using App_Todo_Backend.Core.Models;
 
-namespace App_Todo_Backend.Core.Repository.Auth
+namespace App_Todo_Backend.Core.Services
 {
     public class AuthManager : IAuthManager
     {
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
-        private User _user;
+        private User? _user;
 
         private readonly string _loginProvider;
         private readonly string _refreshToken;
+        private readonly string _jwtKey;
         public AuthManager(IMapper mapper, UserManager<User> userManager, IConfiguration configuration)
         {
             _mapper = mapper;
             _userManager = userManager;
             _configuration = configuration;
-            _loginProvider = _configuration["RefreshToken:LoginProvider"];
-            _refreshToken = _configuration["RefreshToken:Name"];
+            _loginProvider = _configuration["RefreshToken:LoginProvider"] ?? throw new ArgumentNullException("RefreshToken:LoginProvider");
+            _refreshToken = _configuration["RefreshToken:Name"] ?? throw new ArgumentNullException("RefreshToken:Name");
+            _jwtKey = _configuration["Jwt:Key"] ?? throw new ArgumentNullException("Jwt:Key");
         }
 
-        public async Task<string> CreateRefreshToken()
+        public async Task<string?> CreateRefreshToken()
         {
+            if (_user == null) return null;
+
             await _userManager.RemoveAuthenticationTokenAsync(_user, _loginProvider, _refreshToken);
             var newRefreshToken = await _userManager.GenerateUserTokenAsync(_user, _loginProvider, _refreshToken);
             var result = await _userManager.SetAuthenticationTokenAsync(_user, _loginProvider, _refreshToken, newRefreshToken);
             return result.Succeeded ? newRefreshToken : null;
         }
 
-        public async Task<AuthResponse> VerifyRefeshToken(AuthResponse request)
+        public async Task<AuthResponse?> VerifyRefeshToken(AuthResponse request)
         {
             var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
             var tokenContent = jwtSecurityTokenHandler.ReadJwtToken(request.Token);
@@ -50,16 +54,18 @@ namespace App_Todo_Backend.Core.Repository.Auth
 
             var isValidRefreshToken = await _userManager.VerifyUserTokenAsync(_user, _loginProvider, _refreshToken, request.Token);
 
-            if (isValidRefreshToken) {
+            if (isValidRefreshToken)
+            {
                 var token = await GenerateToken();
-                return new AuthResponse { UserId = _user.Id, Token = token, RefreshToken = await CreateRefreshToken() };
+                var refreshToken = await CreateRefreshToken();
+                return new AuthResponse { UserId = _user.Id, Token = token, RefreshToken = refreshToken };
             }
 
             await _userManager.UpdateSecurityStampAsync(_user);
             return null;
         }
 
-        public async Task<AuthResponse> Login(LoginUser inputUser)
+        public async Task<AuthResponse?> Login(LoginUser inputUser)
         {
             _user = await _userManager.FindByEmailAsync(inputUser.Email);
             if (_user != null)
@@ -75,7 +81,7 @@ namespace App_Todo_Backend.Core.Repository.Auth
 
         public async Task<IEnumerable<IdentityError>> Register(InputUser inputUser)
         {
-            _user= _mapper.Map<User>(inputUser);
+            _user = _mapper.Map<User>(inputUser);
             var result = await _userManager.CreateAsync(_user, inputUser.Password);
 
             //Defult Role for new user
@@ -87,7 +93,9 @@ namespace App_Todo_Backend.Core.Repository.Auth
 
         private async Task<string> GenerateToken()
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            if (_user == null) return string.Empty;
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtKey));
 
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
@@ -95,11 +103,12 @@ namespace App_Todo_Backend.Core.Repository.Auth
             var rolesClaims = roles.Select(role => new Claim(ClaimTypes.Role, role)).ToList();
             var userClaims = await _userManager.GetClaimsAsync(_user);
 
+            var userEmail = _user.Email ?? string.Empty;
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, _user.Email),
+                new Claim(JwtRegisteredClaimNames.Sub, userEmail),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, _user.Email),
+                new Claim(JwtRegisteredClaimNames.Email, userEmail),
                 new Claim(JwtRegisteredClaimNames.NameId, _user.Id)
             }
             .Union(userClaims)

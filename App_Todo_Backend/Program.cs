@@ -1,12 +1,12 @@
 using App_Todo_Backend.Core.Configurations;
 using App_Todo_Backend.Core.Contract;
-using App_Todo_Backend.Core.Contract.Todo;
-using App_Todo_Backend.Core.Contract.Users;
 using App_Todo_Backend.Core.Middleware;
 using App_Todo_Backend.Core.Repository;
-using App_Todo_Backend.Core.Repository.Auth;
-using App_Todo_Backend.Core.Repository.Todo;
+using App_Todo_Backend.Core.Services;
 using App_Todo_Backend.Data;
+using App_Todo_Backend.Data.Contract;
+using App_Todo_Backend.Data.Models;
+using App_Todo_Backend.Data.Repository;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -65,7 +65,8 @@ builder.Services.AddAutoMapper(typeof(MapperConfig));
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IAuthManager, AuthManager>();
-builder.Services.AddScoped<ITodoRepository, TodoRepository>();
+builder.Services.AddScoped<IRepositoryTodo, RepositoryTodo>();
+builder.Services.AddScoped<IServiceTodo, ServiceTodo>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

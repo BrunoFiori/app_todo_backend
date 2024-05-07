@@ -1,12 +1,9 @@
-﻿using App_Todo_Backend.Core.Configurations;
-using System.ComponentModel.DataAnnotations;
-
-namespace App_Todo_Backend.Core.Models.User
+﻿namespace App_Todo_Backend.Core.Models
 {
     public class OutputUser
     {        
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
+        public required string FirstName { get; set; }
+        public string? LastName { get; set; }
+        public required string Email { get; set; }
     }
 }

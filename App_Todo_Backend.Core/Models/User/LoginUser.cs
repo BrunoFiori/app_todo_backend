@@ -1,15 +1,15 @@
 ﻿using App_Todo_Backend.Core.Configurations;
 using System.ComponentModel.DataAnnotations;
 
-namespace App_Todo_Backend.Core.Models.User
+namespace App_Todo_Backend.Core.Models
 {
     public class LoginUser
     {
         [Required]        
         [EmailAddress]
-        public string Email { get; set; }
+        public required string Email { get; set; }
         [Required]
         [SecurePassword]
-        public string Password { get; set; }
+        public required string Password { get; set; }
     }
 }

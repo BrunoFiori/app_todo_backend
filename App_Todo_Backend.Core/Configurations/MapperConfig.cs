@@ -1,6 +1,5 @@
-﻿using App_Todo_Backend.Data;
-using App_Todo_Backend.Core.Models.Todo;
-using App_Todo_Backend.Core.Models.User;
+﻿using App_Todo_Backend.Core.Models;
+using App_Todo_Backend.Data.Models;
 using AutoMapper;
 
 namespace App_Todo_Backend.Core.Configurations
@@ -13,7 +12,9 @@ namespace App_Todo_Backend.Core.Configurations
                 .AfterMap((inusr, usr) => usr.UserName= inusr.Email);
             CreateMap<User, OutputUser>().ReverseMap();
             CreateMap<Todo, InputTodo>().ReverseMap();
-            CreateMap<OutputTodo, Todo>().ReverseMap();
+            CreateMap<Todo, OutputTodo>().ReverseMap();
+            CreateMap(typeof(PagedResult<>), typeof(PagedResult<>)).ForMember("Items", opt => opt.MapFrom("Items"));
+
         }
     }
 }

@@ -1,6 +1,5 @@
-﻿using App_Todo_Backend.Core.Contract.Todo;
-using App_Todo_Backend.Core.Models.QueryParameters;
-using App_Todo_Backend.Core.Models.Todo;
+﻿using App_Todo_Backend.Core.Contract;
+using App_Todo_Backend.Data.Models;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
@@ -12,12 +11,12 @@ namespace App_Todo_Backend.Controllers
     [ApiVersion("1.0")]
     public class TodoController : ControllerBase
     {
-        public readonly ITodoRepository _todoRepository;
+        public readonly IServiceTodo _serviceTodo;
         private readonly ILogger<AuthenticationController> _logger;
 
-        public TodoController(ITodoRepository todoRepository, ILogger<AuthenticationController> logger)
+        public TodoController(IServiceTodo serviceTodo, ILogger<AuthenticationController> logger)
         {
-            _todoRepository = todoRepository;
+            _serviceTodo = serviceTodo;
             _logger = logger;
         }
 
@@ -28,7 +27,7 @@ namespace App_Todo_Backend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]//potential return 200 reutrn type
         public async Task<IActionResult> GetAll()
         {
-            var result = await _todoRepository.ListAllAsync();
+            var result = await _serviceTodo.ListAllAsync();
             return Ok(result);
         }
 
@@ -39,7 +38,7 @@ namespace App_Todo_Backend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]//potential return 200 reutrn type
         public async Task<IActionResult> Get([FromQuery] QueryParameters queryParameters)
         {
-            var pagedTodoResult = await _todoRepository.ListAllPagedAsync<OutputTodo>(queryParameters);
+            var pagedTodoResult = await _serviceTodo.ListAllPagedAsync(queryParameters);
             return Ok(pagedTodoResult);
         }
 
